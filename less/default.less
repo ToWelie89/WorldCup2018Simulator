@@ -1,0 +1,251 @@
+@black: black;
+@lightgray: gainsboro;
+@mediumgray: gray;
+@darkgray: darkgray;
+@white: white;
+@linkcolor: darkred;
+@linkcolorhover: @linkcolor + #2F2F2F;
+
+body{
+    background-color: @black;
+    width: 100%;
+    overflow-x: hidden;
+}
+th, td { padding: 0px; }
+table { border-collapse: separate; border-spacing: 0px; }
+p {
+    font-size: 12px;
+    font-family: Arial;
+    margin: 0px;
+    padding: 0px;
+}
+a {
+    color: @linkcolor;
+    text-decoration: none;
+}
+
+a:hover {
+    color: @linkcolorhover;
+    text-decoration: underline;
+}
+
+input[type='button'] {
+    margin-left: 25px;
+    color: @black;
+    background-color: @white;
+    border: 1px solid @black;
+    cursor: pointer;
+}
+
+input[type='button']:hover{
+    background-color: @lightgray;
+    border: 1px solid red;
+}
+
+#clearButton{
+    margin-left: 10px;
+}
+
+#restartButton{
+    margin-top: 10px;
+    margin-bottom: -10px;
+    float: right;
+}
+
+.knockoutPhaseCell {
+    div {
+        span {
+            float: left;
+        }
+        height: 19px;
+    }
+}
+
+#tournamentCompleteContainer{
+    visibility: hidden;
+    width: 300px;
+    z-index: 5;
+    padding: 25px;
+    margin: 0 auto;
+    border: 3px solid @black;
+    border-radius: 30px;
+    background-color: @white;
+    text-align: center;
+}
+
+
+div#main{
+    margin: auto;
+    width: 1280px;
+    background-color: @lightgray;
+    padding: 5px;
+    border-radius: 10px;
+    border: 5px solid @darkgray;
+}
+
+h1#title{
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Bangers', cursive;
+    font-size: 32px;
+    margin-left: 15px;
+}
+
+h2#subtitle{
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Arial';
+    font-size: 12px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+    font-weight: normal;
+    font-style: normal;
+}
+
+div.groupContainer{
+    float: left;
+    margin-top: 5px;
+    padding: 3px;
+    border: 1px solid @mediumgray;
+    border-radius: 8px;
+    background-color: @white;
+}
+
+.groupTable {
+    p {
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+
+.groupMiddleLine{
+    padding: 0px;
+    margin: 0px;
+    width: 96%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-top: dashed 1px;
+}
+
+.groupMatchesTable {
+    p {
+        padding: 7px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+
+div.upperGroupsContainer{
+    clear: both;
+}
+
+#groupIndexColumn{
+    width: 15px;
+}
+
+#groupTeamColumn{
+    width: 120px;
+}
+
+.groupStatColumn{
+    width: 15px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.knockoutMatchScoreBox,
+.matchScoreBox{
+	width: 25px;
+	margin: 0px;
+	padding: 0px;
+    border: none;
+    border-radius: 3px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.knockoutMatchScoreBox{
+    margin-top: 1px;
+}
+
+.knockoutMatchScoreBox[disabled='disabled']
+.knockoutMatchScoreBox[disabled],{
+    background-color: @darkgray;
+}
+
+.matchLine{
+	margin: 0px;
+	padding: 0px;
+}
+
+#groupMatchesContainers{
+    margin-top: 15px;
+}
+
+#knockOutPhaseTable{
+    margin-top: 15px;
+}
+
+#rightBracket {
+    margin-left: 5px;
+}
+
+#leftBracket {
+    margin-right: 5px;
+}
+
+#leftBracket {
+    tr {
+        td {
+            padding: 2px 0px 2px 15px;
+        }
+    }
+}
+
+#leftBracket .knockoutMatchScoreBox{
+    float: right;
+    margin-left: 10px;
+}
+
+#rightBracket {
+    tr {
+        td {
+            padding: 2px 15px 2px 0px;
+        }
+    }
+}
+
+#rightBracket .knockoutMatchScoreBox{
+    float: left;
+    margin-right: 10px;
+}
+
+.bracketTable {
+    tr {
+        td {
+            div {
+                background-color: @darkgray;
+                padding: 3px 8px 4px 8px;
+                border-radius: 5px;
+                min-width: 60px;
+            }
+        }
+    }
+}
+
+.bracketTable {
+    tr {
+        td {
+            div {
+                span {
+                    color: @lightgray;
+                }
+            }
+        }
+    }
+}
