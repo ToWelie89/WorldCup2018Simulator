@@ -18,6 +18,7 @@ import { compress, decompress } from './dataCompresser';
 *************************/
 
 const data = {};
+let idVariable;
 
 $(document).ready(() => {
     initializeGroups();
@@ -30,13 +31,32 @@ $(document).ready(() => {
     $('.knockoutMatchScoreBox').keyup(knockoutPhaseKeyUp);
 
     $('#restartButton').click(function(){
-        window.location.replace(rootPath);
+        window.location.replace();
     });
 
-    if (idVariable.length > 0){
-        loadDataFromId();
+    idVariable = getParameterValueByKey('id');
+
+    if (idVariable && idVariable.length > 0){
+        loadDataFromId(idVariable);
     }
 });
+
+const getParameterValueByKey = parameterName => {
+    var pageURL = window.location.href;
+    var parameters = pageURL.split('?')[1];
+
+    if (parameters) {
+        parameters = parameters.split('&');
+        for (var i = 0, max = parameters.length; i < max; i++) {
+            var paramPair = parameters[i].split('=');
+            if (paramPair[0] === parameterName) {
+                return paramPair[1];
+            }
+        }
+    }
+
+    return null;
+}
 
 const initializeGroups = () => {
     data.groups = new Array();
@@ -149,9 +169,9 @@ const initializeMatches = () => {
         for (let k = 0; k < data.groups[i].matches.length; k++) {
             htmlString += '<tr>';
             htmlString += '<td align=\'right\' width=\'150\'><p>' + data.groups[i].matches[k].team1 + '</p></td>';
-            htmlString += '<td><input type=\'text\' class=\'matchScoreBox match1\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
+            htmlString += '<td><input maxlength=\"1\"  type=\'text\' class=\'matchScoreBox match1\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
             htmlString += '<td><span class=\'matchLine\'><p>-</p></span></td>';
-            htmlString += '<td><input type=\'text\' class=\'matchScoreBox match2\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
+            htmlString += '<td><input maxlength=\"1\" type=\'text\' class=\'matchScoreBox match2\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
             htmlString += '<td align=\'left\' width=\'150\'><p>' + data.groups[i].matches[k].team2 + '</p></td>';
             htmlString += '</tr>';
         }
@@ -176,6 +196,26 @@ function randomizeGroups(index, element){
     $('.knockoutMatchScoreBox').keyup();
     $('.matchScoreBox').each(function(){
         $(this).val(Math.floor((Math.random() * 5) + 1));
+        $(this).keyup();
+    });
+
+    $('.knockoutPhaseCell[round="16"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(index % 2 === 0 ? 1 : 2);
+        $(this).keyup();
+    });
+
+    $('.knockoutPhaseCell[round="8"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(index % 2 === 0 ? 1 : 2);
+        $(this).keyup();
+    });
+
+    $('.knockoutPhaseCell[round="4"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(index % 2 === 0 ? 1 : 2);
+        $(this).keyup();
+    });
+
+    $('.knockoutPhaseCell[round="2"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(index % 2 === 0 ? 1 : 2);
         $(this).keyup();
     });
 }
@@ -309,22 +349,33 @@ function checkIfTournamentIsDone(){
             tournamentIsComplete = false;
         }
     });
-    if (tournamentIsComplete && idVariable.length == 0){
-        $('#main').css('opacity', '0.2');
-        $('#tournamentCompleteContainer').css('visibility', 'visible');
+    if (tournamentIsComplete && !idVariable){
+        $('#main').css('opacity', '0.8');
+        $('#tournamentCompleteContainer').css('display', 'block');
 
         var resultat = '';
-        $('input[type="text"]').each(function(){
-            resultat += $(this).val() + '-';
+
+        $('.matchScoreBox').each(function(){
+            resultat += $(this).val();
+        });
+        $('.knockoutPhaseCell[round="16"] .knockoutMatchScoreBox').each(function(index){
+            resultat += $(this).val();
+        });
+        $('.knockoutPhaseCell[round="8"] .knockoutMatchScoreBox').each(function(index){
+            resultat += $(this).val();
+        });
+        $('.knockoutPhaseCell[round="4"] .knockoutMatchScoreBox').each(function(index){
+            resultat += $(this).val();
+        });
+        $('.knockoutPhaseCell[round="2"] .knockoutMatchScoreBox').each(function(index){
+            resultat += $(this).val();
         });
 
-        dataCompresser.compress(resultat).done(function(result) {
-            var url = $('#shareLink').attr('href');
-            var url = url.replace('PLACEHOLDER', rootPath + '?id=' + result);
-            $('#codeTextArea').val(result);
-            $('#shareLink').attr('href', url);
-            console.log(url);
-        }).fail(function() {});
+        var url = $('#shareLink').attr('href');
+        var url = url.replace('PLACEHOLDER', rootPath + '?id=' + resultat);
+        $('#codeTextArea').val(resultat);
+        $('#shareLink').attr('href', url);
+        console.log(url);
 
         $('.knockoutMatchScoreBox').unbind();
         $('.matchScoreBox').unbind();
@@ -497,21 +548,32 @@ function getTeam(name) {
     }
 }
 
-function loadDataFromId(){
-    dataCompresser.decompress(idVariable).done(function(result) {
-        console.log(result);
-        var resultatArray = result.split('-');
-        var i = 0;
-        $('input[type="text"]').each(function(){
-            $(this).val(resultatArray[i]);
-            $(this).keyup();
-            i++;
-        });
-        i = 0;
-        $('input[type="text"]').each(function(){
-            $(this).val(resultatArray[i]);
-            i++;
-        });
-        $('.knockoutMatchScoreBox').keyup();
-    }).fail(function() {  });
+function loadDataFromId(idVariable){
+    var i = 0;
+
+    $('.matchScoreBox').each(function(){
+        $(this).val(idVariable[i]);
+        $(this).keyup();
+        i++;
+    });
+    $('.knockoutPhaseCell[round="16"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(idVariable[i]);
+        $(this).keyup();
+        i++;
+    });
+    $('.knockoutPhaseCell[round="8"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(idVariable[i]);
+        $(this).keyup();
+        i++;
+    });
+    $('.knockoutPhaseCell[round="4"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(idVariable[i]);
+        $(this).keyup();
+        i++;
+    });
+    $('.knockoutPhaseCell[round="2"] .knockoutMatchScoreBox').each(function(index){
+        $(this).val(idVariable[i]);
+        $(this).keyup();
+        i++;
+    });
 }
