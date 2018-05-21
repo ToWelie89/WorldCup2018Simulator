@@ -24,7 +24,8 @@ $(document).ready(() => {
     initializeMatches();
 
     // Set listeners
-    $('#randomizeButton').click(randomizeGroups);
+    $('#randomizeGroupsButton').click((index, element) => randomize(false));
+    $('#randomizeAllButton').click((index, element) => randomize(true));
     $('#clearButton').click(function() {
         window.location.replace(window.location.href.split('?')[0]);
     });
@@ -204,7 +205,7 @@ const initializeMatches = () => {
     EVENT HANDLERS
 *************************/
 
-function randomizeGroups(index, element){
+function randomize(randomizeKnockoutPhase = false){
     startLoader();
     setTimeout(() => {
         $('.knockoutMatchScoreBox').val('');
@@ -235,10 +236,12 @@ function randomizeGroups(index, element){
             });
         }
 
-        generateKnockoutPhase(16);
-        generateKnockoutPhase(8);
-        generateKnockoutPhase(4);
-        generateKnockoutPhase(2);
+        if (randomizeKnockoutPhase) {
+            generateKnockoutPhase(16);
+            generateKnockoutPhase(8);
+            generateKnockoutPhase(4);
+            generateKnockoutPhase(2);
+        }
 
         stopLoader();
     }, 50);
