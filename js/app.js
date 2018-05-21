@@ -11,8 +11,6 @@ import {
     rootPath
 } from './constants';
 
-import { compress, decompress } from './dataCompresser';
-
 /*************************
     INITIALIZATION
 *************************/
@@ -27,11 +25,25 @@ $(document).ready(() => {
 
     // Set listeners
     $('#randomizeButton').click(randomizeGroups);
-    $('#clearButton').click(clearGroups);
+    $('#clearButton').click(function() {
+        window.location.replace(window.location.href.split('?')[0]);
+    });
     $('.knockoutMatchScoreBox').keyup(knockoutPhaseKeyUp);
 
     $('#restartButton').click(function(){
-        window.location.replace();
+        window.location.replace(window.location.href.split('?')[0]);
+    });
+
+    $('#closeModal').click(function() {
+        $('#tournamentCompleteContainer').css('display', 'none');
+        $('#overlay').css('opacity', '0');
+        $('#overlay').css('display', 'none');
+    });
+
+    $('#copyToClipboardButton').click(function() {
+        const text = $('#codeTextArea').val();
+        $('#codeTextArea').select();
+        document.execCommand('copy');
     });
 
     idVariable = getParameterValueByKey('id');
@@ -71,7 +83,8 @@ const initializeGroups = () => {
             currentGroup = data.groups[data.groups.length - 1];
         }
         const team = {
-            name: teams[i],
+            name: teams[i].name,
+            flag: teams[i].flag,
             mp: 0,
             w: 0,
             d: 0,
@@ -118,7 +131,7 @@ const initializeGroupTables = () => {
             }
             htmlString += '<tr>';
             htmlString += '<td><p>' + (k + 1) + '</td>';
-            htmlString += '<td><p>' + data.groups[i].teams[k].name + '</p></td>';
+            htmlString += '<td><img src="' + data.groups[i].teams[k].flag + '" class="countryFlag" /><p>' + data.groups[i].teams[k].name + '</p></td>';
             htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].mp + '</p></td>';
             htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].w + '</p></td>';
             htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].d + '</p></td>';
@@ -151,7 +164,7 @@ const initializeMatches = () => {
         {
             for (let j = 0; j < this.teams.length; j++)
             {
-                if (i > j) this.matches.push({ 'team1': this.teams[i].name, 'team2': this.teams[j].name, 'team1score': -1, 'team2score': -1 });
+                if (i > j) this.matches.push({ 'team1': this.teams[i], 'team2': this.teams[j], 'team1score': -1, 'team2score': -1 });
             }
         }
     });
@@ -165,14 +178,14 @@ const initializeMatches = () => {
         htmlString += '<td>';
         htmlString += '<div class=\'groupMatchesContainer\' width=\'320\' group=\''+data.groups[i].name+'\'>';
         htmlString += '<table class=\'groupMatchesTable\' width=\'320\'>';
-        htmlString += '<tr class=\'groupTitleRow\'><td colspan=\'5\' align=\'center\'><b class=\'groupTitle\'>Group '+data.groups[i].name+'</b></td></tr>';
+        htmlString += '<tr class=\'groupTitleRow\'><td colspan=\'5\' align=\'center\'><p class=\'groupTitle\'>Group '+data.groups[i].name+'</p></td></tr>';
         for (let k = 0; k < data.groups[i].matches.length; k++) {
             htmlString += '<tr>';
-            htmlString += '<td align=\'right\' width=\'150\'><p>' + data.groups[i].matches[k].team1 + '</p></td>';
+            htmlString += '<td align=\'right\' width=\'150\'><p>' + data.groups[i].matches[k].team1.name + '</p><img src="' + data.groups[i].matches[k].team1.flag + '" class="countryFlag"></td>';
             htmlString += '<td><input maxlength=\"1\"  type=\'text\' class=\'matchScoreBox match1\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
             htmlString += '<td><span class=\'matchLine\'><p>-</p></span></td>';
             htmlString += '<td><input maxlength=\"1\" type=\'text\' class=\'matchScoreBox match2\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
-            htmlString += '<td align=\'left\' width=\'150\'><p>' + data.groups[i].matches[k].team2 + '</p></td>';
+            htmlString += '<td align=\'left\' width=\'150\'><img src="' + data.groups[i].matches[k].team2.flag + '" class="countryFlag"><p>' + data.groups[i].matches[k].team2.name + '</p></td>';
             htmlString += '</tr>';
         }
         htmlString += '</table>';
@@ -192,32 +205,61 @@ const initializeMatches = () => {
 *************************/
 
 function randomizeGroups(index, element){
-    $('.knockoutMatchScoreBox').val('');
-    $('.knockoutMatchScoreBox').keyup();
-    $('.matchScoreBox').each(function(){
-        $(this).val(Math.floor((Math.random() * 5) + 1));
-        $(this).keyup();
-    });
+    startLoader();
+    setTimeout(() => {
+        $('.knockoutMatchScoreBox').val('');
+        $('.knockoutMatchScoreBox').keyup();
+        $('.matchScoreBox').each(function(){
+            $(this).val(Math.floor((Math.random() * 5) + 1));
+            $(this).keyup();
+        });
 
-    $('.knockoutPhaseCell[round="16"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(index % 2 === 0 ? 1 : 2);
-        $(this).keyup();
-    });
+        const randomValueThatIsNotX = x => {
+            const val = Math.floor((Math.random() * 5) + 1);
+            return val !== x ? val : randomValueThatIsNotX(x);
+        }
 
-    $('.knockoutPhaseCell[round="8"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(index % 2 === 0 ? 1 : 2);
-        $(this).keyup();
-    });
+        const generateKnockoutPhase = roundOf => {
+            const values = [];
+            for (let i = 0; i < roundOf; i++) {
+                if (i % 2 === 0) {
+                    values.push(Math.floor((Math.random() * 5) + 1));
+                } else {
+                    values.push(randomValueThatIsNotX(values[i - 1]));
+                }
+            }
 
-    $('.knockoutPhaseCell[round="4"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(index % 2 === 0 ? 1 : 2);
-        $(this).keyup();
-    });
+            $(`.knockoutPhaseCell[round="${roundOf}"] .knockoutMatchScoreBox`).each(function(index){
+                $(this).val(values[index]);
+                $(this).keyup();
+            });
+        }
 
-    $('.knockoutPhaseCell[round="2"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(index % 2 === 0 ? 1 : 2);
-        $(this).keyup();
-    });
+        generateKnockoutPhase(16);
+        generateKnockoutPhase(8);
+        generateKnockoutPhase(4);
+        generateKnockoutPhase(2);
+
+        stopLoader();
+    }, 50);
+}
+
+function startLoader() {
+    $('#groupTableContainers').hide();
+    $('#groupMatchesContainers').hide();
+    $('#knockOutPhaseTable').hide();
+    $('#overlay').show();
+    $('#overlay').css('cursor', 'wait');
+    $('#loader').show();
+}
+
+function stopLoader() {
+    $('#groupTableContainers').show();
+    $('#groupMatchesContainers').show();
+    $('#knockOutPhaseTable').show();
+    $('#overlay').hide();
+    $('#overlay').css('cursor', 'default');
+    $('#loader').hide();
 }
 
 function clearGroups(){
@@ -239,18 +281,21 @@ function setMatchScore(){
 
     if (team1score != '' && team2score != '')
     {
+        team1box.removeClass('validGradient invalidGradient');
+        team2box.removeClass('validGradient invalidGradient');
+
         if (isNumber(team1score) && isNumber(team2score))
         {
             data.groups[groupIndex].matches[matchIndex].team1score = team1score;
             data.groups[groupIndex].matches[matchIndex].team2score = team2score;
 
-            team1box.css('background-color', validColor);
-            team2box.css('background-color', validColor);
+            team1box.addClass('validGradient');
+            team2box.addClass('validGradient');
         }
         else
         {
-            team1box.css('background-color', invalidColor);
-            team2box.css('background-color', invalidColor);
+            team1box.addClass('invalidGradient');
+            team2box.addClass('invalidGradient');
         }
     }
     else
@@ -258,8 +303,8 @@ function setMatchScore(){
         data.groups[groupIndex].matches[matchIndex].team1score = -1;
         data.groups[groupIndex].matches[matchIndex].team2score = -1;
 
-        team1box.css('background-color', defaultColor);
-        team2box.css('background-color', defaultColor);
+        team1box.removeClass('validGradient invalidGradient');
+        team2box.removeClass('validGradient invalidGradient');
     }
 
     calculateGroup(groupIndex);
@@ -299,31 +344,35 @@ function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
     var team1score = team1box.val();
     var team2score = team2box.val();
 
+    team1box.removeClass('invalidGradient validGradient');
+    team2box.removeClass('invalidGradient validGradient');
+
     if (team1score != '' && team2score != '')
     {
         if (isNumber(team1score) && isNumber(team2score) && (team1score != team2score))
         {
             $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').removeAttr('disabled');
             $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').css('color', 'black');
-            if (team1score > team2score)
-            {
-                $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text(team1);
-            }
-            else
-            {
-                $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text(team2);
-            }
 
-            team1box.css('background-color', validColor);
-            team2box.css('background-color', validColor);
+            const winningTeamName = team1score > team2score ? team1 : team2;
+            const winningTeam = teams.find(x => x.name === winningTeamName);
+
+            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text(winningTeamName);
+            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').removeClass('hidden');
+            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').attr('src', winningTeam.flag);
+
+            team1box.addClass('validGradient');
+            team2box.addClass('validGradient');
         }
         else
         {
-            team1box.css('background-color', invalidColor);
-            team2box.css('background-color', invalidColor);
+            team1box.addClass('invalidGradient');
+            team2box.addClass('invalidGradient');
 
             $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').css('color', 'gainsboro');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text('empty');
+            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text('TBD');
+            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').addClass('hidden');
+            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').attr('src', '');
             $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').val('');
             $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').attr('disabled', '');
         }
@@ -334,7 +383,9 @@ function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
         team2box.css('background-color', defaultColor);
 
         $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').css('color', 'gainsboro');
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text('empty');
+        $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text('TBD');
+        $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').addClass('hidden');
+        $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').attr('src', '');
         $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').val('');
         $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').attr('disabled', '');
     }
@@ -350,10 +401,23 @@ function checkIfTournamentIsDone(){
         }
     });
     if (tournamentIsComplete && !idVariable){
-        $('#main').css('opacity', '0.8');
+        $('#overlay').css('display', 'block');
+        $('#overlay').css('opacity', '0.6');
         $('#tournamentCompleteContainer').css('display', 'block');
 
-        var resultat = '';
+        let winner;
+
+        if ($('#ro2nr1 input').val() > $('#ro2nr2 input').val()) {
+            winner = $('#ro2nr1 span').text();
+        } else {
+            winner = $('#ro2nr2 span').text();
+        }
+
+        const flag = teams.find(x => x.name === winner).flag;
+
+        $('#predictedWinner').html(`<img src="${flag}" /><h1>${winner}</h1>`);
+
+        let resultat = '';
 
         $('.matchScoreBox').each(function(){
             resultat += $(this).val();
@@ -371,16 +435,12 @@ function checkIfTournamentIsDone(){
             resultat += $(this).val();
         });
 
+        const shareableLink = window.location.href.split('?')[0] + '?id=' + resultat;
+
         var url = $('#shareLink').attr('href');
         var url = url.replace('PLACEHOLDER', rootPath + '?id=' + resultat);
-        $('#codeTextArea').val(resultat);
+        $('#codeTextArea').val(shareableLink);
         $('#shareLink').attr('href', url);
-        console.log(url);
-
-        $('.knockoutMatchScoreBox').unbind();
-        $('.matchScoreBox').unbind();
-        $('#randomizeButton').unbind();
-        $('#clearButton').unbind();
     }
 }
 
@@ -401,8 +461,8 @@ function calculateGroup(groupIndex){
     {
         if (matchIsSet(data.groups[groupIndex].matches[i]) && matchIsValid(data.groups[groupIndex].matches[i])) // Match is set
         {
-            var team1 = getTeam(data.groups[groupIndex].matches[i].team1);
-            var team2 = getTeam(data.groups[groupIndex].matches[i].team2);
+            var team1 = data.groups[groupIndex].matches[i].team1;
+            var team2 = data.groups[groupIndex].matches[i].team2;
             var team1score = data.groups[groupIndex].matches[i].team1score;
             var team2score = data.groups[groupIndex].matches[i].team2score;
 
@@ -450,7 +510,7 @@ function redrawGroup(index){
         }
         htmlString += '<tr>';
         htmlString += '<td><p>' + (k + 1) + '</td>';
-        htmlString += '<td><p>' + data.groups[index].teams[k].name + '</p></td>';
+        htmlString += '<td><img src="' + data.groups[index].teams[k].flag + '" class="countryFlag"><p>' + data.groups[index].teams[k].name + '</p></td>';
         htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].mp + '</p></td>';
         htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].w + '</p></td>';
         htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].d + '</p></td>';
@@ -485,9 +545,13 @@ function redrawGroup(index){
 
     if (groupIsValid)
     {
-        $(`.groupContainer[groupIndex="${index}"]`).css('background-color', validColor);
+        $(`.groupContainer[groupIndex="${index}"]`).addClass('validGradient');
         $('#ro16nr'+ro16box1Number+' div span').html(data.groups[Number(index)].teams[0].name);
         $('#ro16nr'+ro16box2Number+' div span').html(data.groups[Number(index)].teams[1].name);
+        $('#ro16nr'+ro16box1Number+' div img').attr('src', data.groups[Number(index)].teams[0].flag);
+        $('#ro16nr'+ro16box2Number+' div img').attr('src', data.groups[Number(index)].teams[1].flag);
+        $('#ro16nr'+ro16box1Number+' div img').removeClass('hidden');
+        $('#ro16nr'+ro16box2Number+' div img').removeClass('hidden')
         $('#ro16nr'+ro16box1Number+' div span').css('color', 'black');
         $('#ro16nr'+ro16box2Number+' div span').css('color', 'black');
         $('#ro16nr'+ro16box1Number+' div input[type="text"]').removeAttr('disabled');
@@ -495,11 +559,13 @@ function redrawGroup(index){
     }
     else
     {
-        $(`.groupContainer[groupIndex="${index}"]`).css('background-color', defaultColor);
-        $('#ro16nr'+ro16box1Number+' div span').html('empty');
-        $('#ro16nr'+ro16box2Number+' div span').html('empty');
+        $(`.groupContainer[groupIndex="${index}"]`).removeClass('validGradient');
+        $('#ro16nr'+ro16box1Number+' div span').html('TBD');
+        $('#ro16nr'+ro16box2Number+' div span').html('TBD');
         $('#ro16nr'+ro16box1Number+' div span').css('color', 'gainsboro');
         $('#ro16nr'+ro16box2Number+' div span').css('color', 'gainsboro');
+        $('#ro16nr'+ro16box1Number+' div img').addClass('hidden');
+        $('#ro16nr'+ro16box2Number+' div img').addClass('hidden')
         $('#ro16nr'+ro16box1Number+' div input[type="text"]').attr('disabled', '');
         $('#ro16nr'+ro16box2Number+' div input[type="text"]').attr('disabled', '');
         $('#ro16nr'+ro16box1Number+' div input[type="text"]').val('');
@@ -538,42 +604,38 @@ function isNumber(input)
     return eval('/^\\d+$/').test(input);
 }
 
-function getTeam(name) {
-    for (var i = 0; i < data.groups.length; i++) {
-        for (var j = 0; j < data.groups[i].teams.length; j++) {
-            if (data.groups[i].teams[j].name == name) {
-                return data.groups[i].teams[j];
-            }
-        }
-    }
-}
-
 function loadDataFromId(idVariable){
-    var i = 0;
+    startLoader();
 
-    $('.matchScoreBox').each(function(){
-        $(this).val(idVariable[i]);
-        $(this).keyup();
-        i++;
-    });
-    $('.knockoutPhaseCell[round="16"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(idVariable[i]);
-        $(this).keyup();
-        i++;
-    });
-    $('.knockoutPhaseCell[round="8"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(idVariable[i]);
-        $(this).keyup();
-        i++;
-    });
-    $('.knockoutPhaseCell[round="4"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(idVariable[i]);
-        $(this).keyup();
-        i++;
-    });
-    $('.knockoutPhaseCell[round="2"] .knockoutMatchScoreBox').each(function(index){
-        $(this).val(idVariable[i]);
-        $(this).keyup();
-        i++;
-    });
+    setTimeout(() => {
+        var i = 0;
+
+        $('.matchScoreBox').each(function(){
+            $(this).val(idVariable[i]);
+            $(this).keyup();
+            i++;
+        });
+        $('.knockoutPhaseCell[round="16"] .knockoutMatchScoreBox').each(function(index){
+            $(this).val(idVariable[i]);
+            $(this).keyup();
+            i++;
+        });
+        $('.knockoutPhaseCell[round="8"] .knockoutMatchScoreBox').each(function(index){
+            $(this).val(idVariable[i]);
+            $(this).keyup();
+            i++;
+        });
+        $('.knockoutPhaseCell[round="4"] .knockoutMatchScoreBox').each(function(index){
+            $(this).val(idVariable[i]);
+            $(this).keyup();
+            i++;
+        });
+        $('.knockoutPhaseCell[round="2"] .knockoutMatchScoreBox').each(function(index){
+            $(this).val(idVariable[i]);
+            $(this).keyup();
+            i++;
+        });
+
+        stopLoader();
+    }, 50);
 }

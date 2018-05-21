@@ -1,43 +1,43 @@
 // Group A
-const EGYPT = 'Egypt';
-const RUSSIA = 'Russia';
-const SAUDI_ARABIA = 'Saudi Arabia';
-const URUGUAY = 'Uruguay';
+const EGYPT = { name:'Egypt', flag: './assets/flags/Egypt.jpg' };
+const RUSSIA = { name:'Russia', flag: './assets/flags/Russia.jpg' };
+const SAUDI_ARABIA = { name:'Saudi Arabia', flag: './assets/flags/Saudi_Arabia.jpg' };
+const URUGUAY = { name:'Uruguay', flag: './assets/flags/Uruguay.jpg' };
 // Group B
-const IRAN = 'Iran';
-const MOROCCO = 'Morocco';
-const PORTUGAL = 'Portugal';
-const SPAIN = 'Spain';
+const IRAN = { name:'Iran', flag: './assets/flags/Iran.jpg' };
+const MOROCCO = { name:'Morroco', flag: './assets/flags/Morocco.jpg' };
+const PORTUGAL = { name:'Portugal', flag: './assets/flags/Portugal.jpg' };
+const SPAIN = { name:'Spain', flag: './assets/flags/Spain.jpg' };
 // Group C
-const AUSTRALIA = 'Australia';
-const DENMARK = 'Denmark';
-const FRANCE = 'France';
-const PERU = 'Peru';
+const AUSTRALIA = { name:'Australia', flag: './assets/flags/Australia.jpg' };
+const DENMARK = { name:'Denmark', flag: './assets/flags/Denmark.jpg' };
+const FRANCE = { name:'France', flag: './assets/flags/France.jpg' };
+const PERU = { name:'Peru', flag: './assets/flags/Peru.jpg' };
 // Group D
-const ARGENTINA = 'Argentina';
-const CROATIA = 'Croatia';
-const ICELAND = 'Iceland';
-const NIGERIA = 'Nigeria';
+const ARGENTINA = { name:'Argentina', flag: './assets/flags/Argentina.jpg' };
+const CROATIA = { name:'Croatia', flag: './assets/flags/Croatia.jpg' };
+const ICELAND = { name:'Iceland', flag: './assets/flags/Iceland.jpg' };
+const NIGERIA = { name:'Nigeria', flag: './assets/flags/Nigeria.jpg' };
 // Group E
-const BRAZIL = 'Brazil';
-const COSTA_RICA = 'Costa Rica';
-const SWITZERLAND = 'Switzerland';
-const SERBIA = 'Serbia';
+const BRAZIL = { name:'Brazil', flag: './assets/flags/Brazil.jpg' };
+const COSTA_RICA = { name:'Costa Rica', flag: './assets/flags/Costa_Rica.jpg' };
+const SWITZERLAND = { name:'Switzerland', flag: './assets/flags/Switzerland.jpg' };
+const SERBIA = { name:'Serbia', flag: './assets/flags/Serbia.jpg' };
 // Group F
-const GERMANY = 'Germany';
-const KOREA_REPUBLIC = 'Korea Republic';
-const MEXICO = 'Mexico';
-const SWEDEN = 'Sweden';
+const GERMANY = { name:'Germany', flag: './assets/flags/Germany.jpg' };
+const KOREA_REPUBLIC = { name:'South Korea', flag: './assets/flags/South_Korea.jpg' };
+const MEXICO = { name:'Mexico', flag: './assets/flags/Mexico.jpg' };
+const SWEDEN = { name:'Sweden', flag: './assets/flags/Sweden.jpg' };
 // Group G
-const BELGIUM = 'Belgium';
-const ENGLAND = 'England';
-const PANAMA = 'Panama';
-const TUNISIA = 'Tunisia';
+const BELGIUM = { name:'Belgium', flag: './assets/flags/Belgium.jpg' };
+const ENGLAND = { name:'England', flag: './assets/flags/England.jpg' };
+const PANAMA = { name:'Panama', flag: './assets/flags/Panama.jpg' };
+const TUNISIA = { name:'Tunisia', flag: './assets/flags/Tunisia.jpg' };
 // Group H
-const COLOMBIA = 'Colombia';
-const JAPAN = 'Japan';
-const POLAND = 'Poland';
-const SENEGAL = 'Senegal';
+const COLOMBIA = { name:'Colombia', flag: './assets/flags/Colombia.jpg' };
+const JAPAN = { name:'Japan', flag: './assets/flags/Japan.jpg' };
+const POLAND = { name:'Poland', flag: './assets/flags/Poland.jpg' };
+const SENEGAL = { name:'Senegal', flag: './assets/flags/Senegal.jpg' };
 
 const teams = [
     EGYPT,

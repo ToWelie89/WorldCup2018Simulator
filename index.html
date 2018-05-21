@@ -14,34 +14,69 @@
                 }(document, 'script', 'facebook-jssdk'));
         </script>
         <link rel="stylesheet" type="text/css" href="build/default.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
         <title>
             World Cup 2018 Calculator
         </title>
     </head>
     <body>
+        <div id="overlay"></div>
         <div id="fb-root"></div>
         <div id="tournamentCompleteContainer">
-            <div>
-                <p>
-                    You are done predicting results for the World Cup 2018.<br><br>
-                    Share your prediction with your friends via Facebook!<br><br>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=PLACEHOLDER" target="_blank" id="shareLink">Share on Facebook!</a><br>
-                    ID:<br>
-                    <textarea id="codeTextArea"></textarea>
-                    <input type="button" value="Restart" id="restartButton" />
+            <div id="inner">
+                <i class="fas fa-times" id="closeModal"></i>
+                <p style="font-size: 16px;">
+                    Predicted winner:
                 </p>
+                <div id="predictedWinner"></div>
+                <div>
+                    <p>
+                        You are done predicting results for the World Cup 2018.
+                    </p>
+                    <p>
+                        Share your prediction with your friends via Facebook!
+                    </p>
+                    <p>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=PLACEHOLDER" target="_blank" id="shareLink">Share on Facebook!</a>
+                    </p>
+                    <div style="margin-top: 15px;">
+                        <p style="font-size: 18px;">Shareable link:</p>
+                        <textarea id="codeTextArea"></textarea>
+                    </div>
+                    <div>
+                        <button class="blue" id="copyToClipboardButton">
+                            Copy link to clipboard
+                        </button>
+                        <button class="green" id="restartButton">
+                            Restart
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="main">
-            <div id="shareButton">
-                <div class="fb-share-button" data-href="http://www.martinsonesson.se/pi/WC2018" data-type="button_count" style="float: right;"></div>
+            <div class="topBar">
+                <div id="shareButton">
+                    <div class="fb-share-button" data-href="http://www.martinsonesson.se/pi/WC2018" data-type="button_count" style="float: right;"></div>
+                </div>
+                <h1 id="title">World Cup 2018 Calculator</h1>
+                <h2 id="subtitle">A webapplication made by <a target="_blank" href="http://se.linkedin.com/pub/martin-sonesson/47/b65/200/ms">Martin Sonesson</a> @ <a target="_blank" href="http://www.martinsonesson.se">martinsonesson.se</a></h2>
+                <button id="randomizeButton" class="blue">
+                    Randomize all
+                </button>
+                <button id="clearButton" class="red">
+                    Clear
+                </button>
             </div>
 
-            <h1 id="title">World Cup 2018 Calculator</h1>
-            <h2 id="subtitle">A webapplication made by <a target="_blank" href="http://se.linkedin.com/pub/martin-sonesson/47/b65/200/ms">Martin Sonesson</a> @ <a target="_blank" href="http://www.martinsonesson.se">martinsonesson.se</a></h2>
-            <input type="button" value="Randomize all matches" id="randomizeButton" />
-            <input type="button" value="Clear" id="clearButton" />
+            <div id="loader">
+                <h1>
+                    Loading...
+                </h1>
+                <img src="assets/loader.gif" />
+            </div>
+
             <div id="groupTableContainers"></div>
             <div id="groupMatchesContainers"></div>
             <div id="knockOutPhaseTable">
@@ -50,70 +85,72 @@
                         <td>
                             <table border="0" cellspacing="0" cellpadding="0" class="bracketTable" id="leftBracket" align="right">
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr1"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr1" rowspan="2"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="4" id="ro4nr1" rowspan="4"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="2" id="ro2nr1" rowspan="8"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr1">
+                                        <p style="text-align: center;">Ro16</p>
+                                        <div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr1" rowspan="2"><p style="text-align: center;">Quarter finals</p><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="4" id="ro4nr1" rowspan="4"><p style="text-align: center;">Semi finals</p><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="2" id="ro2nr1" rowspan="8"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr2"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr2"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr3"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr2" rowspan="2"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr3"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr2" rowspan="2"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr4"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr4"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr5"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr3" rowspan="2"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="4" id="ro4nr2" rowspan="4"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr5"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr3" rowspan="2"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="4" id="ro4nr2" rowspan="4"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr6"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr6"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr7"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr4" rowspan="2"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr7"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr4" rowspan="2"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr8"><div><span>empty</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr8"><div><img src="" class="countryFlag hidden" /> <span>TBD</span> <input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /></div></td>
                                 </tr>
                             </table>
                         </td>
                         <td>
                             <table border="0" cellspacing="0" cellpadding="0" class="bracketTable" id="rightBracket" align="left">
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="2" id="ro2nr2" rowspan="8"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="4" id="ro4nr3" rowspan="4"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr5" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr9"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="2" id="ro2nr2" rowspan="8"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="4" id="ro4nr3" rowspan="4"><p style="text-align: center;">Semi finals</p><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr5" rowspan="2"><p style="text-align: center;">Quarter finals</p><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr9"><p style="text-align: center;">Ro16</p><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr10"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr10"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr6" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr11"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr6" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr11"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr12"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr12"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="4" id="ro4nr4" rowspan="4"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr7" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr13"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="4" id="ro4nr4" rowspan="4"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr7" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr13"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr14"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr14"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="8" id="ro8nr8" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr15"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="8" id="ro8nr8" rowspan="2"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr15"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                                 <tr>
-                                    <td class="knockoutPhaseCell" round="16" id="ro16nr16"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /> <span>empty</span></div></td>
+                                    <td class="knockoutPhaseCell" round="16" id="ro16nr16"><div><input maxlength="1" type="text" class="knockoutMatchScoreBox" disabled /><img src="" class="countryFlag hidden" /> <span>TBD</span></div></td>
                                 </tr>
                             </table>
                         </td>

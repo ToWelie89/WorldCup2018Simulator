@@ -6,50 +6,98 @@
 @linkcolor: darkred;
 @linkcolorhover: @linkcolor + #2F2F2F;
 
+html {
+    height: 100%;
+}
+
 body{
-    background-color: @black;
+    background-image: url(https://st3.depositphotos.com/6064568/12675/v/950/depositphotos_126751636-stock-illustration-natural-realistic-green-grass-texture.jpg);
     width: 100%;
     overflow-x: hidden;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 100%;
 }
 th, td { padding: 0px; }
 table { border-collapse: separate; border-spacing: 0px; }
 p {
     font-size: 12px;
-    font-family: Arial;
+    font-family: 'Bangers', cursive;
     margin: 0px;
     padding: 0px;
 }
 a {
-    color: @linkcolor;
+    color: #a815a9;
     text-decoration: none;
 }
-
 a:hover {
-    color: @linkcolorhover;
-    text-decoration: underline;
+    font-style: italic;
+    color: #f717f9;
+}
+h1 {
+    font-family: 'Bangers', cursive;
 }
 
-input[type='button'] {
-    margin-left: 25px;
-    color: @black;
-    background-color: @white;
-    border: 1px solid @black;
+#randomizeButton {
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+button {
+    position: relative;
+    padding: 8px 40px;
+    border-radius: 10px;
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    color: #FFF;
+    text-decoration: none;
+    transition: all 0.1s;
+    -webkit-transition: all 0.1s;
+    border: none;
     cursor: pointer;
-}
+    outline: none;
 
-input[type='button']:hover{
-    background-color: @lightgray;
-    border: 1px solid red;
+    &.blue
+    {
+        background-color: #3498DB;
+        border-bottom: 5px solid #2980B9;
+        text-shadow: 0px -2px #2980B9;
+    }
+
+    &.red
+    {
+        background-color: #E74C3C;
+        border-bottom: 5px solid #BD3E31;
+        text-shadow: 0px -2px #BD3E31;
+    }
+
+    &.green
+    {
+        background-color: #82BF56;
+        border-bottom: 5px solid #669644;
+        text-shadow: 0px -2px #669644;
+    }
+
+    &.yellow
+    {
+        background-color: #F2CF66;
+        border-bottom: 5px solid #D1B358;
+        text-shadow: 0px -2px #D1B358;
+    }
+
+    &:hover{
+        color: #d0d0d0;
+    }
+
+    &:active {
+        transform: translate(0px,5px);
+        -webkit-transform: translate(0px,5px);
+        border-width: 1px;
+    }
 }
 
 #clearButton{
     margin-left: 10px;
-}
-
-#restartButton{
-    margin-top: 10px;
-    margin-bottom: -10px;
-    float: right;
 }
 
 .knockoutPhaseCell {
@@ -61,6 +109,26 @@ input[type='button']:hover{
     }
 }
 
+#loader {
+    display: none;
+    text-align: center;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.39);
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    display: none;
+    opacity: 0;
+    transition: all 0.5s;
+}
+
 #tournamentCompleteContainer{
     display: none;
     z-index: 5;
@@ -68,31 +136,66 @@ input[type='button']:hover{
     width: 100%;
     top: 50px;
 
-    div {
+    #predictedWinner {
+        img {
+            height: 27px;
+            box-shadow: 1px 1px 4px black;
+            display: inline-block;
+        }
+        h1 {
+            display: inline-block;
+            margin-left: 15px;
+        }
+    }
+
+    #inner {
         padding: 25px;
         margin: 0 auto;
-        border: 3px solid @black;
-        border-radius: 30px;
         background-color: @white;
         text-align: center;
-        width: 300px;
+        width: 500px;
+        box-shadow: 3px 3px 5px black;
+
+        i {
+            float: right;
+            margin-top: -10px;
+            cursor: pointer;
+            color: black;
+
+            &:hover {
+                color: grey;
+            }
+        }
 
         textarea {
-            width: 190px;
-            height: 120px;
+            width: 340px;
+            height: 60px;
+            border: 1px solid grey;
+            padding: 10px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            outline: none;
         }
     }
 }
 
-
-
 div#main{
     margin: auto;
     width: 1280px;
-    background-color: @lightgray;
-    padding: 5px;
-    border-radius: 10px;
-    border: 5px solid @darkgray;
+    background-color: #d0bcff;
+    border: 5px solid #8166c1;
+    border-top: none;
+    border-bottom: none;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-left: 10px;
+    padding-right: 5px;
+    height: 100%;
+}
+
+.topBar {
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 
 h1#title{
@@ -101,32 +204,49 @@ h1#title{
     font-family: 'Bangers', cursive;
     font-size: 32px;
     margin-left: 15px;
+    color: white;
+    text-shadow: 1px 1px 3px black;
 }
 
 h2#subtitle{
     padding: 0px;
     margin: 0px;
-    font-family: 'Arial';
     font-size: 12px;
-    margin-left: 25px;
+    margin-left: 16px;
     margin-bottom: 5px;
     font-weight: normal;
     font-style: normal;
+    font-family: 'Bangers', cursive;
 }
 
 div.groupContainer{
     float: left;
     margin-top: 5px;
     padding: 3px;
-    border: 1px solid @mediumgray;
-    border-radius: 8px;
+    box-shadow: 1px 1px 4px #0000008a;
     background-color: @white;
+    transition: all 0.4s;
+}
+
+.countryFlag {
+    height: 10px;
+    width: 15px;
+    float: left;
+    margin-right: 7px;
+    margin-top: 3px;
+    box-shadow: 1px 1px 5px #000000b3;
+}
+
+.hidden {
+    display: none;
 }
 
 .groupTable {
     p {
         padding-top: 2px;
         padding-bottom: 2px;
+        font-family: 'Bangers', cursive;
+        font-weight: 400;
     }
 }
 
@@ -140,10 +260,24 @@ div.groupContainer{
 }
 
 .groupMatchesTable {
+    img {
+        float: none;
+        display: inline-block;
+        margin: 0;
+    }
+    tr {
+        img:first-child {
+            margin-left: 6px;
+        }
+        img:last-child {
+            margin-right: 6px;
+        }
+    }
     p {
         padding: 7px;
         padding-top: 2px;
         padding-bottom: 2px;
+        display: inline-block;
     }
 }
 
@@ -177,8 +311,32 @@ div.upperGroupsContainer{
     box-sizing: border-box;         /* Opera/IE 8+ */
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 5px;
+    padding-left: 10px;
     padding-right: 5px;
+    transition: all 0.3s;
+    font-family: 'Bangers', cursive;
+    box-shadow: 1px 1px 3px #0000006b;
+    &:focus {
+        outline: none;
+    }
+}
+
+.validGradient {
+    background: #adf986; /* Old browsers */
+    background: -moz-linear-gradient(top, #adf986 0%, #68e24f 41%, #05b74c 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #adf986 0%,#68e24f 41%,#05b74c 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #adf986 0%,#68e24f 41%,#05b74c 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#adf986', endColorstr='#05b74c',GradientType=0 ); /* IE6-9 */
+    transition: all: 0.4s;
+}
+
+.invalidGradient {
+    background: #f98686; /* Old browsers */
+    background: -moz-linear-gradient(top, #f98686 0%, #e85151 42%, #930404 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #f98686 0%,#e85151 42%,#930404 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #f98686 0%,#e85151 42%,#930404 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f98686', endColorstr='#930404',GradientType=0 ); /* IE6-9 */
+    transition: all: 0.4s;
 }
 
 .knockoutMatchScoreBox{
@@ -196,11 +354,22 @@ div.upperGroupsContainer{
 }
 
 #groupMatchesContainers{
+    .groupTitle {
+        font-family: 'Bangers', cursive;
+        font-size: 18px;
+    }
     margin-top: 15px;
 }
 
 #knockOutPhaseTable{
     margin-top: 15px;
+    padding-bottom: 15px;
+    background: #d0bcff;
+    border: 5px solid #8166c1;
+    border-top: none;
+    margin-left: -15px;
+    margin-right: -10px;
+    border-bottom: none;
 }
 
 #rightBracket {
@@ -241,10 +410,13 @@ div.upperGroupsContainer{
     tr {
         td {
             div {
-                background-color: @darkgray;
+                background-color: #a687f1;
                 padding: 3px 8px 4px 8px;
-                border-radius: 5px;
                 min-width: 60px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                box-shadow: 1px 1px 3px #00000085;
+                font-family: 'Bangers', cursive;
             }
         }
     }
