@@ -440,10 +440,8 @@ function checkIfTournamentIsDone(){
 
         const shareableLink = window.location.href.split('?')[0] + '?id=' + resultat;
 
-        var url = $('#shareLink').attr('href');
-        var url = url.replace('PLACEHOLDER', rootPath + '?id=' + resultat);
         $('#codeTextArea').val(shareableLink);
-        $('#shareLink').attr('href', url);
+        $('.fb-share-button').attr('data-href', shareableLink);
     }
 }
 
