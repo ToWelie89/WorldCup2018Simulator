@@ -251,8 +251,6 @@ function startLoader() {
     $('#groupTableContainers').hide();
     $('#groupMatchesContainers').hide();
     $('#knockOutPhaseTable').hide();
-    $('#overlay').show();
-    $('#overlay').css('cursor', 'wait');
     $('#loader').show();
 }
 
@@ -260,8 +258,6 @@ function stopLoader() {
     $('#groupTableContainers').show();
     $('#groupMatchesContainers').show();
     $('#knockOutPhaseTable').show();
-    $('#overlay').hide();
-    $('#overlay').css('cursor', 'default');
     $('#loader').hide();
 }
 
@@ -404,7 +400,8 @@ function checkIfTournamentIsDone(){
         }
     });
     if (tournamentIsComplete && !idVariable){
-        $('#overlay').css('display', 'block');
+        console.log('show');
+        $('#overlay').show();
         $('#overlay').css('opacity', '0.6');
         $('#tournamentCompleteContainer').css('display', 'block');
 
