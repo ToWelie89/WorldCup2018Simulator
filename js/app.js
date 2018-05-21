@@ -442,6 +442,7 @@ function checkIfTournamentIsDone(){
 
         $('#codeTextArea').val(shareableLink);
         $('.fb-share-button').attr('data-href', shareableLink);
+        $('[property="og:url"]').attr('content', shareableLink);
     }
 }
 
