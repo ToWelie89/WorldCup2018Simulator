@@ -2,21 +2,19 @@
 <html xmlns="http:/www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8"/>
-        <meta property="og:title" content="The Rock" />
-        <meta property="og:type" content="video.movie" />
-        <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
-        <meta property="og:image" content="https://www.soccer.com/wcm/connect/d6739af5-38f8-4ae2-9ea3-111853ffcc9b/soccer-guide-preview.jpg" />
+        <meta property="og:title" content="World Cup 2018 Simulator" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://martinsonesson.se/wc2018" />
         <link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
         <script src="node_modules/jquery/dist/jquery.min.js"></script>
         <script src="build/app.bundle.js"></script>
         <script>(function(d, s, id) {
-                  var js, fjs = d.getElementsByTagName(s)[0];
-                  if (d.getElementById(id)) return;
-                  js = d.createElement(s); js.id = id;
-                  js.src = "//connect.facebook.net/sv_SE/sdk.js#xfbml=1&appId=689778051059856&version=v2.0";
-                  fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-        </script>
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = 'https://connect.facebook.net/sv_SE/sdk.js#xfbml=1&version=v3.0&appId=151627931575423&autoLogAppEvents=1';
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
         <link rel="stylesheet" type="text/css" href="build/default.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
         <title>
@@ -62,7 +60,7 @@
         <div id="main">
             <div class="topBar">
                 <div id="shareButton">
-                    <div class="fb-share-button" data-href="http://www.martinsonesson.se/pi/WC2018" data-type="button_count" style="float: right;"></div>
+                    <div class="fb-share-button" data-href="http://martinsonesson.se/wc2018/" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fmartinsonesson.se%2Fwc2018%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share  </a></div>
                 </div>
                 <h1 id="title">World Cup 2018 Calculator</h1>
                 <h2 id="subtitle">A webapplication made by <a target="_blank" href="http://se.linkedin.com/pub/martin-sonesson/47/b65/200/ms">Martin Sonesson</a> @ <a target="_blank" href="http://www.martinsonesson.se">martinsonesson.se</a></h2>
