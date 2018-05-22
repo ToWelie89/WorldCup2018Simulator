@@ -439,7 +439,13 @@ function checkIfTournamentIsDone(){
 
         $('#codeTextArea').val(shareableLink);
 
-        $('#facebookShareLink').attr('href', `https://www.facebook.com/sharer/sharer.php?u=${shareableLink}`)
+        $('#facebookShareLink').unbind();
+        $('#facebookShareLink').click(function() {
+            window.open(
+            `https://www.facebook.com/sharer/sharer.php?u=${shareableLink}`,
+            '',
+            'width=200,height=100');
+        });
     }
 }
 
