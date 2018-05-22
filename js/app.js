@@ -5,10 +5,7 @@ import {
     NUMBER_OF_GROUPS,
     TEAMS_PER_GROUP,
     knockOutPhases,
-    validColor,
-    invalidColor,
     defaultColor,
-    rootPath
 } from './constants';
 
 /*************************
@@ -19,6 +16,12 @@ const data = {};
 let idVariable;
 
 $(document).ready(() => {
+    fetch('./package.json')
+    .then((resp) => resp.json())
+    .then((data) => {
+        $('#version').text(data.version);
+    });
+
     initializeGroups();
     initializeGroupTables();
     initializeMatches();
@@ -55,13 +58,13 @@ $(document).ready(() => {
 });
 
 const getParameterValueByKey = parameterName => {
-    var pageURL = window.location.href;
-    var parameters = pageURL.split('?')[1];
+    const pageURL = window.location.href;
+    let parameters = pageURL.split('?')[1];
 
     if (parameters) {
         parameters = parameters.split('&');
-        for (var i = 0, max = parameters.length; i < max; i++) {
-            var paramPair = parameters[i].split('=');
+        for (let i = 0, max = parameters.length; i < max; i++) {
+            const paramPair = parameters[i].split('=');
             if (paramPair[0] === parameterName) {
                 return paramPair[1];
             }
@@ -269,14 +272,14 @@ function clearGroups(){
 }
 
 function setMatchScore(){
-    var groupIndex = $(this).attr('groupIndex');
-    var matchIndex = $(this).attr('matchIndex');
+    const groupIndex = $(this).attr('groupIndex');
+    const matchIndex = $(this).attr('matchIndex');
 
-    var team1box = $('.match1[groupIndex='+groupIndex+'][matchIndex='+matchIndex+']');
-    var team2box = $('.match2[groupIndex='+groupIndex+'][matchIndex='+matchIndex+']');
+    const team1box = $('.match1[groupIndex='+groupIndex+'][matchIndex='+matchIndex+']');
+    const team2box = $('.match2[groupIndex='+groupIndex+'][matchIndex='+matchIndex+']');
 
-    var team1score = team1box.val();
-    var team2score = team2box.val();
+    const team1score = team1box.val();
+    const team2score = team2box.val();
 
     if (team1score != '' && team2score != '')
     {
@@ -308,9 +311,9 @@ function setMatchScore(){
 
     calculateGroup(groupIndex);
 
-    for (var i = 0; i < knockOutPhases.length; i++)
+    for (let i = 0; i < knockOutPhases.length; i++)
     {
-        for (var j = 0; j < knockOutPhases[i]; (j += 2))
+        for (let j = 0; j < knockOutPhases[i]; (j += 2))
         {
             calculateAndRedrawKnockoutMatch(knockOutPhases[i], j);
         }
@@ -318,8 +321,8 @@ function setMatchScore(){
 }
 
 function knockoutPhaseKeyUp(){
-    var thisRound = Number($(this).parent().parent().attr('round'));
-    var thisRoundIndex = Number($(this).parent().parent().attr('id').replace('ro'+thisRound+'nr', ''));
+    const thisRound = Number($(this).parent().parent().attr('round'));
+    const thisRoundIndex = Number($(this).parent().parent().attr('id').replace('ro'+thisRound+'nr', ''));
 
     calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex); // E.g 16, 2 for the second Ro16 match
 }
@@ -330,18 +333,18 @@ function knockoutPhaseKeyUp(){
 
 function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
 {
-    var nextRound = (thisRound / 2);
-    var oppsiteMatchIndex = (thisRoundIndex % 2 == 0) ? (thisRoundIndex - 1) : (thisRoundIndex + 1);
-    var nextRoundIndex = (thisRoundIndex % 2 == 0) ? (thisRoundIndex / 2) : ((thisRoundIndex + 1) / 2);
+    const nextRound = (thisRound / 2);
+    const oppsiteMatchIndex = (thisRoundIndex % 2 == 0) ? (thisRoundIndex - 1) : (thisRoundIndex + 1);
+    const nextRoundIndex = (thisRoundIndex % 2 == 0) ? (thisRoundIndex / 2) : ((thisRoundIndex + 1) / 2);
 
-    var team1 = $('#ro'+thisRound+'nr'+thisRoundIndex+' div span').text();
-    var team2 = $('#ro'+thisRound+'nr'+oppsiteMatchIndex+' div span').text();
+    const team1 = $('#ro'+thisRound+'nr'+thisRoundIndex+' div span').text();
+    const team2 = $('#ro'+thisRound+'nr'+oppsiteMatchIndex+' div span').text();
 
-    var team1box = $('#ro'+thisRound+'nr'+thisRoundIndex+' div input[type="text"]');
-    var team2box = $('#ro'+thisRound+'nr'+oppsiteMatchIndex+' div input[type="text"]');
+    const team1box = $('#ro'+thisRound+'nr'+thisRoundIndex+' div input[type="text"]');
+    const team2box = $('#ro'+thisRound+'nr'+oppsiteMatchIndex+' div input[type="text"]');
 
-    var team1score = team1box.val();
-    var team2score = team2box.val();
+    const team1score = team1box.val();
+    const team2score = team2box.val();
 
     team1box.removeClass('invalidGradient validGradient');
     team2box.removeClass('invalidGradient validGradient');
@@ -393,7 +396,7 @@ function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
 }
 
 function checkIfTournamentIsDone(){
-    var tournamentIsComplete = true;
+    let tournamentIsComplete = true;
     $('.knockoutMatchScoreBox').each(function(){
         if (!isNumber(Number($(this).val())) || $(this).val() == ''){
             tournamentIsComplete = false;
@@ -450,7 +453,7 @@ function checkIfTournamentIsDone(){
 }
 
 function calculateGroup(groupIndex){
-    for (var i = 0; i < data.groups[groupIndex].teams.length; i++)
+    for (let i = 0; i < data.groups[groupIndex].teams.length; i++)
     {
         data.groups[groupIndex].teams[i].a = 0;
         data.groups[groupIndex].teams[i].d = 0;
@@ -462,14 +465,14 @@ function calculateGroup(groupIndex){
         data.groups[groupIndex].teams[i].w = 0;
     }
 
-    for (var i = 0; i < data.groups[groupIndex].matches.length; i++)
+    for (let i = 0; i < data.groups[groupIndex].matches.length; i++)
     {
         if (matchIsSet(data.groups[groupIndex].matches[i]) && matchIsValid(data.groups[groupIndex].matches[i])) // Match is set
         {
-            var team1 = data.groups[groupIndex].matches[i].team1;
-            var team2 = data.groups[groupIndex].matches[i].team2;
-            var team1score = data.groups[groupIndex].matches[i].team1score;
-            var team2score = data.groups[groupIndex].matches[i].team2score;
+            const team1 = data.groups[groupIndex].matches[i].team1;
+            const team2 = data.groups[groupIndex].matches[i].team2;
+            const team1score = data.groups[groupIndex].matches[i].team1score;
+            const team2score = data.groups[groupIndex].matches[i].team2score;
 
             team1.mp++;
             team1.f += Number(team1score);
@@ -507,8 +510,8 @@ function calculateGroup(groupIndex){
 
 function redrawGroup(index){
     sortGroup(data.groups[index]);
-    var htmlString = '';
-    for (var k = 0; k < data.groups[index].teams.length; k++) {
+    let htmlString = '';
+    for (let k = 0; k < data.groups[index].teams.length; k++) {
         if (k == 2) // add line in middle
         {
             htmlString += '<tr><td align=\'center\' colspan=\'10\'><div class=\'groupMiddleLine\'></td></tr>';
@@ -527,16 +530,16 @@ function redrawGroup(index){
         htmlString += '</tr>';
     }
     $('#groupTableBodyIndex'+index).html(htmlString);
-    var groupIsValid = true;
-    for (var k = 0; k < data.groups[index].matches.length; k++) {
+    let groupIsValid = true;
+    for (let k = 0; k < data.groups[index].matches.length; k++) {
         if (!(matchIsSet(data.groups[index].matches[k]) && matchIsValid(data.groups[index].matches[k])))
         {
             groupIsValid = false;
         }
     }
 
-    var ro16box1Number;
-    var ro16box2Number
+    let ro16box1Number;
+    let ro16box2Number
 
     if (index % 2 == 0){
         ro16box1Number = Number(index) + 1;
@@ -613,7 +616,7 @@ function loadDataFromId(idVariable){
     startLoader();
 
     setTimeout(() => {
-        var i = 0;
+        let i = 0;
 
         $('.matchScoreBox').each(function(){
             $(this).val(idVariable[i]);

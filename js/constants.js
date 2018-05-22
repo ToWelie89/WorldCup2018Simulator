@@ -84,12 +84,7 @@ const TEAMS_PER_GROUP = 4;
 
 const knockOutPhases = [16, 8, 4, 2];
 
-const validColor = '#99CC00';
-const invalidColor = '#B84325';
 const defaultColor = 'white';
-
-const rootPath = 'http://martino2.duckdns.org/pi/index.php';
-const directoryRootPath = 'http://martino2.duckdns.org/pi/WC2014/';
 
 export {
     teams,
@@ -98,9 +93,5 @@ export {
     NUMBER_OF_GROUPS,
     TEAMS_PER_GROUP,
     knockOutPhases,
-    validColor,
-    invalidColor,
     defaultColor,
-    rootPath,
-    directoryRootPath
 };
