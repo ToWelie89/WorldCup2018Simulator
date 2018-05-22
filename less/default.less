@@ -106,6 +106,15 @@ button {
 }
 
 #loader {
+    background: #d0bcff;
+    border: 5px solid #8166c1;
+    border-top: none;
+    margin-left: -15px;
+    margin-right: -10px;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+    padding-left: 10px;
     display: none;
     text-align: center;
 }
@@ -241,6 +250,18 @@ div.groupContainer{
     display: none;
 }
 
+#groupTableContainers {
+    background: #d0bcff;
+    border: 5px solid #8166c1;
+    border-top: none;
+    margin-left: -15px;
+    margin-right: -10px;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+    padding-left: 10px;
+}
+
 .groupTable {
     p {
         padding-top: 2px;
@@ -330,6 +351,10 @@ div.upperGroupsContainer{
     &:focus {
         outline: none;
     }
+
+    &:disabled {
+        background: #bfbfbf;
+    }
 }
 
 .validGradient {
@@ -377,7 +402,6 @@ div.upperGroupsContainer{
         font-family: 'Bangers', cursive;
         font-size: 18px;
     }
-    margin-top: 15px;
 }
 
 #knockOutPhaseTable{
@@ -450,5 +474,18 @@ div.upperGroupsContainer{
                 }
             }
         }
+    }
+}
+
+#ro2nr1, #ro2nr2 {
+    text-align: center;
+    i {
+        color: #ecec65;
+        text-shadow: 1px 1px 7px #0000008f;
+        font-size: 30px;
+        position: relative;
+        top: -5px;
+        margin-top: -11px;
+        visibility: hidden;
     }
 }

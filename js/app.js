@@ -16,6 +16,7 @@ const data = {};
 let idVariable;
 
 $(document).ready(() => {
+    // Fetch current version from package.json
     fetch('./package.json')
     .then((resp) => resp.json())
     .then((data) => {
@@ -29,22 +30,23 @@ $(document).ready(() => {
     // Set listeners
     $('#randomizeGroupsButton').click((index, element) => randomize(false));
     $('#randomizeAllButton').click((index, element) => randomize(true));
-    $('#clearButton').click(function() {
+
+    $('#clearButton').click(() => {
         window.location.replace(window.location.href.split('?')[0]);
     });
+    $('#restartButton').click(() => {
+        window.location.replace(window.location.href.split('?')[0]);
+    });
+
     $('.knockoutMatchScoreBox').keyup(knockoutPhaseKeyUp);
 
-    $('#restartButton').click(function(){
-        window.location.replace(window.location.href.split('?')[0]);
-    });
-
-    $('#closeModal').click(function() {
+    $('#closeModal').click(() => {
         $('#tournamentCompleteContainer').css('display', 'none');
         $('#overlay').css('opacity', '0');
         $('#overlay').css('display', 'none');
     });
 
-    $('#copyToClipboardButton').click(function() {
+    $('#copyToClipboardButton').click(() => {
         const text = $('#codeTextArea').val();
         $('#codeTextArea').select();
         document.execCommand('copy');
@@ -75,7 +77,7 @@ const getParameterValueByKey = parameterName => {
 }
 
 const initializeGroups = () => {
-    data.groups = new Array();
+    data.groups = [];
     for (let i = 0; i < teams.length; i++) {
         let currentGroup;
         if (i % TEAMS_PER_GROUP == 0) {
@@ -106,55 +108,54 @@ const initializeGroups = () => {
 }
 
 const initializeGroupTables = () => {
-    let htmlString = '<table width=\'100%\'>';
+    let htmlString = `<table width="100%">`;
     for (let i = 0; i < data.groups.length; i++)
     {
         if (i == 0 || i == (NUMBER_OF_GROUPS / 2)) {
-            htmlString += '<tr>';
+            htmlString += `<tr>`;
         }
-        htmlString += '<td>';
-        htmlString += '<div class=\'groupContainer\' groupIndex=\''+i+'\'>';
-        htmlString += '<table class=\'groupTable\'>';
-        htmlString += '<tr>';
-        htmlString += '<th id=\'groupIndexColumn\' align=\'left\'><p>#</p></th>';
-        htmlString += '<th id=\'groupTeamColumn\' align=\'left\'><p>Team</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>MP</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>W</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>D</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>L</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>F</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>A</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>D</p></th>';
-        htmlString += '<th class=\'groupStatColumn\' align=\'center\'><p>P</p></th>';
-        htmlString += '</tr>';
-        htmlString += '<tbody id=\'groupTableBodyIndex'+i+'\'>';
+        htmlString += `<td>`;
+        htmlString += `<div class="groupContainer" groupIndex="${i}">`;
+        htmlString += `<table class="groupTable">`;
+        htmlString += `<tr>`;
+        htmlString += `<th id="groupIndexColumn" align="left"><p>#</p></th>`;
+        htmlString += `<th id="groupTeamColumn" align="left"><p>Team</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>MP</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>W</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>D</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>L</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>F</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>A</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>D</p></th>`;
+        htmlString += `<th class="groupStatColumn" align="center"><p>P</p></th>`;
+        htmlString += `</tr>`;
+        htmlString += `<tbody id="groupTableBodyIndex${i}">`;
         for (let k = 0; k < data.groups[i].teams.length; k++) {
-            if (k == 2)
-            {
-                htmlString += '<tr><td align=\'center\' colspan=\'10\'><div class=\'groupMiddleLine\'></td></tr>';
+            if (k == 2) {
+                htmlString += `<tr><td align="center" colspan="10"><div class="groupMiddleLine"></td></tr>`;
             }
-            htmlString += '<tr>';
-            htmlString += '<td><p>' + (k + 1) + '</td>';
-            htmlString += '<td><img src="' + data.groups[i].teams[k].flag + '" class="countryFlag" /><p>' + data.groups[i].teams[k].name + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].mp + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].w + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].d + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].l + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].f + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].a + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].diff + '</p></td>';
-            htmlString += '<td align=\'center\'><p>' + data.groups[i].teams[k].p + '</p></td>';
-            htmlString += '</tr>';
+            htmlString += `<tr>`;
+            htmlString += `<td><p>${(k + 1)}</p></td>`;
+            htmlString += `<td><img src="${data.groups[i].teams[k].flag}" class="countryFlag" /><p>${data.groups[i].teams[k].name}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].mp}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].w}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].d}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].l}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].f}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].a}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].diff}</p></td>`;
+            htmlString += `<td align="center"><p>${data.groups[i].teams[k].p}</p></td>`;
+            htmlString += `</tr>`;
         }
-        htmlString += '</tbody>';
-        htmlString += '</table>';
-        htmlString += '</div>';
-        htmlString += '</td>';
+        htmlString += `</tbody>`;
+        htmlString += `</table>`;
+        htmlString += `</div>`;
+        htmlString += `</td>`;
         if (i == 3 || i == NUMBER_OF_GROUPS) {
-            htmlString += '</tr>';
+            htmlString += `</tr>`;
         }
     }
-    htmlString += '</table>';
+    htmlString += `</table>`;
     $('#groupTableContainers').html(htmlString);
 }
 
@@ -163,43 +164,41 @@ const initializeMatches = () => {
         data.groups[i].matches = [];
     }
 
-    $.each(data.groups, function(){
-        for (let i = 0; i < this.teams.length; i++)
-        {
-            for (let j = 0; j < this.teams.length; j++)
-            {
-                if (i > j) this.matches.push({ 'team1': this.teams[i], 'team2': this.teams[j], 'team1score': -1, 'team2score': -1 });
+    data.groups.forEach(group => {
+        for (let i = 0; i < group.teams.length; i++) {
+            for (let j = 0; j < group.teams.length; j++) {
+                if (i > j) group.matches.push({ 'team1': group.teams[i], 'team2': group.teams[j], 'team1score': -1, 'team2score': -1 });
             }
         }
     });
 
-    let htmlString = '<table width=\'100%\'>';
+    let htmlString = `<table width="100%">`;
     for (let i = 0; i < data.groups.length; i++)
     {
         if (i == 0 || i == (NUMBER_OF_GROUPS / 2)) {
-            htmlString += '<tr>';
+            htmlString += `<tr>`;
         }
-        htmlString += '<td>';
-        htmlString += '<div class=\'groupMatchesContainer\' width=\'320\' group=\''+data.groups[i].name+'\'>';
-        htmlString += '<table class=\'groupMatchesTable\' width=\'320\'>';
-        htmlString += '<tr class=\'groupTitleRow\'><td colspan=\'5\' align=\'center\'><p class=\'groupTitle\'>Group '+data.groups[i].name+'</p></td></tr>';
+        htmlString += `<td>`;
+        htmlString += `<div class="groupMatchesContainer" width="320" group="${data.groups[i].name}">`;
+        htmlString += `<table class="groupMatchesTable" width="320">`;
+        htmlString += `<tr class="groupTitleRow"><td colspan="5" align="center"><p class="groupTitle">Group ${data.groups[i].name}</p></td></tr>`;
         for (let k = 0; k < data.groups[i].matches.length; k++) {
-            htmlString += '<tr>';
-            htmlString += '<td align=\'right\' width=\'150\'><p>' + data.groups[i].matches[k].team1.name + '</p><img src="' + data.groups[i].matches[k].team1.flag + '" class="countryFlag"></td>';
-            htmlString += '<td><input maxlength=\"1\"  type=\'text\' class=\'matchScoreBox match1\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
-            htmlString += '<td><span class=\'matchLine\'><p>-</p></span></td>';
-            htmlString += '<td><input maxlength=\"1\" type=\'text\' class=\'matchScoreBox match2\' groupIndex=\''+i+'\' matchIndex=\''+k+'\' /></td>';
-            htmlString += '<td align=\'left\' width=\'150\'><img src="' + data.groups[i].matches[k].team2.flag + '" class="countryFlag"><p>' + data.groups[i].matches[k].team2.name + '</p></td>';
-            htmlString += '</tr>';
+            htmlString += `<tr>`;
+            htmlString += `<td align="right" width="150"><p>${data.groups[i].matches[k].team1.name}</p><img src="${data.groups[i].matches[k].team1.flag}" class="countryFlag"></td>`;
+            htmlString += `<td><input maxlength="1"  type="text" class="matchScoreBox match1" groupIndex="${i}" matchIndex="${k}" /></td>`;
+            htmlString += `<td><span class="matchLine"><p>-</p></span></td>`;
+            htmlString += `<td><input maxlength="1" type="text" class="matchScoreBox match2" groupIndex="${i}" matchIndex="${k}" /></td>`;
+            htmlString += `<td align="left" width="150"><img src="${data.groups[i].matches[k].team2.flag}" class="countryFlag"><p>${data.groups[i].matches[k].team2.name}</p></td>`;
+            htmlString += `</tr>`;
         }
-        htmlString += '</table>';
-        htmlString += '</div>';
-        htmlString += '</td>';
+        htmlString += `</table>`;
+        htmlString += `</div>`;
+        htmlString += `</td>`;
         if (i == 3 || i == NUMBER_OF_GROUPS) {
-            htmlString += '</tr>';
+            htmlString += `</tr>`;
         }
     }
-    htmlString += '</table>';
+    htmlString += `</table>`;
     $('#groupMatchesContainers').html(htmlString);
     $('.matchScoreBox').keyup(setMatchScore);
 }
@@ -255,6 +254,7 @@ function startLoader() {
     $('#groupMatchesContainers').hide();
     $('#knockOutPhaseTable').hide();
     $('#loader').show();
+    $('body').css('cursor', 'wait');
 }
 
 function stopLoader() {
@@ -262,6 +262,7 @@ function stopLoader() {
     $('#groupMatchesContainers').show();
     $('#knockOutPhaseTable').show();
     $('#loader').hide();
+    $('body').css('cursor', 'default');
 }
 
 function clearGroups(){
@@ -275,8 +276,8 @@ function setMatchScore(){
     const groupIndex = $(this).attr('groupIndex');
     const matchIndex = $(this).attr('matchIndex');
 
-    const team1box = $('.match1[groupIndex='+groupIndex+'][matchIndex='+matchIndex+']');
-    const team2box = $('.match2[groupIndex='+groupIndex+'][matchIndex='+matchIndex+']');
+    const team1box = $(`.match1[groupIndex="${groupIndex}"][matchIndex=${matchIndex}]`);
+    const team2box = $(`.match2[groupIndex="${groupIndex}"][matchIndex=${matchIndex}]`);
 
     const team1score = team1box.val();
     const team2score = team2box.val();
@@ -311,10 +312,8 @@ function setMatchScore(){
 
     calculateGroup(groupIndex);
 
-    for (let i = 0; i < knockOutPhases.length; i++)
-    {
-        for (let j = 0; j < knockOutPhases[i]; (j += 2))
-        {
+    for (let i = 0; i < knockOutPhases.length; i++) {
+        for (let j = 0; j < knockOutPhases[i]; (j += 2)) {
             calculateAndRedrawKnockoutMatch(knockOutPhases[i], j);
         }
     }
@@ -322,7 +321,7 @@ function setMatchScore(){
 
 function knockoutPhaseKeyUp(){
     const thisRound = Number($(this).parent().parent().attr('round'));
-    const thisRoundIndex = Number($(this).parent().parent().attr('id').replace('ro'+thisRound+'nr', ''));
+    const thisRoundIndex = Number($(this).parent().parent().attr('id').replace(`ro${thisRound}nr`, ''));
 
     calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex); // E.g 16, 2 for the second Ro16 match
 }
@@ -337,11 +336,11 @@ function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
     const oppsiteMatchIndex = (thisRoundIndex % 2 == 0) ? (thisRoundIndex - 1) : (thisRoundIndex + 1);
     const nextRoundIndex = (thisRoundIndex % 2 == 0) ? (thisRoundIndex / 2) : ((thisRoundIndex + 1) / 2);
 
-    const team1 = $('#ro'+thisRound+'nr'+thisRoundIndex+' div span').text();
-    const team2 = $('#ro'+thisRound+'nr'+oppsiteMatchIndex+' div span').text();
+    const team1 = $(`#ro${thisRound}nr${thisRoundIndex} div span`).text();
+    const team2 = $(`#ro${thisRound}nr${oppsiteMatchIndex} div span`).text();
 
-    const team1box = $('#ro'+thisRound+'nr'+thisRoundIndex+' div input[type="text"]');
-    const team2box = $('#ro'+thisRound+'nr'+oppsiteMatchIndex+' div input[type="text"]');
+    const team1box = $(`#ro${thisRound}nr${thisRoundIndex} div input[type="text"]`);
+    const team2box = $(`#ro${thisRound}nr${oppsiteMatchIndex} div input[type="text"]`);
 
     const team1score = team1box.val();
     const team2score = team2box.val();
@@ -353,15 +352,15 @@ function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
     {
         if (isNumber(team1score) && isNumber(team2score) && (team1score != team2score))
         {
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').removeAttr('disabled');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').css('color', 'black');
+            $(`#ro${nextRound}nr${nextRoundIndex} div input[type="text"]`).removeAttr('disabled');
+            $(`#ro${nextRound}nr${nextRoundIndex} div span`).css('color', 'black');
 
             const winningTeamName = team1score > team2score ? team1 : team2;
             const winningTeam = teams.find(x => x.name === winningTeamName);
 
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text(winningTeamName);
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').removeClass('hidden');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').attr('src', winningTeam.flag);
+            $(`#ro${nextRound}nr${nextRoundIndex} div span`).text(winningTeamName);
+            $(`#ro${nextRound}nr${nextRoundIndex} div img`).removeClass('hidden');
+            $(`#ro${nextRound}nr${nextRoundIndex} div img`).attr('src', winningTeam.flag);
 
             team1box.addClass('validGradient');
             team2box.addClass('validGradient');
@@ -371,25 +370,22 @@ function calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex)
             team1box.addClass('invalidGradient');
             team2box.addClass('invalidGradient');
 
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').css('color', 'gainsboro');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text('TBD');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').addClass('hidden');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').attr('src', '');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').val('');
-            $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').attr('disabled', '');
+            $(`#ro${nextRound}nr${nextRoundIndex} div span`).css('color', 'gainsboro');
+            $(`#ro${nextRound}nr${nextRoundIndex} div span`).text('TBD');
+            $(`#ro${nextRound}nr${nextRoundIndex} div img`).addClass('hidden');
+            $(`#ro${nextRound}nr${nextRoundIndex} div img`).attr('src', '');
+            $(`#ro${nextRound}nr${nextRoundIndex} div input[type="text"]`).val('');
+            $(`#ro${nextRound}nr${nextRoundIndex} div input[type="text"]`).attr('disabled', '');
         }
     }
     else
     {
-        team1box.css('background-color', defaultColor);
-        team2box.css('background-color', defaultColor);
-
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').css('color', 'gainsboro');
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div span').text('TBD');
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').addClass('hidden');
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div img').attr('src', '');
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').val('');
-        $('#ro'+nextRound+'nr'+nextRoundIndex+' div input[type="text"]').attr('disabled', '');
+        $(`#ro${nextRound}nr${nextRoundIndex} div span`).css('color', 'gainsboro');
+        $(`#ro${nextRound}nr${nextRoundIndex} div span`).text('TBD');
+        $(`#ro${nextRound}nr${nextRoundIndex} div img`).addClass('hidden');
+        $(`#ro${nextRound}nr${nextRoundIndex} div img`).attr('src', '');
+        $(`#ro${nextRound}nr${nextRoundIndex} div input[type="text"]`).val('');
+        $(`#ro${nextRound}nr${nextRoundIndex} div input[type="text"]`).attr('disabled', '');
     }
 
     checkIfTournamentIsDone();
@@ -412,8 +408,10 @@ function checkIfTournamentIsDone(){
 
         if ($('#ro2nr1 input').val() > $('#ro2nr2 input').val()) {
             winner = $('#ro2nr1 span').text();
+            $('#ro2nr1 i').css('visibility', 'visible');
         } else {
             winner = $('#ro2nr2 span').text();
+            $('#ro2nr2 i').css('visibility', 'visible');
         }
 
         const flag = teams.find(x => x.name === winner).flag;
@@ -514,22 +512,22 @@ function redrawGroup(index){
     for (let k = 0; k < data.groups[index].teams.length; k++) {
         if (k == 2) // add line in middle
         {
-            htmlString += '<tr><td align=\'center\' colspan=\'10\'><div class=\'groupMiddleLine\'></td></tr>';
+            htmlString += `<tr><td align="center" colspan="10"><div class="groupMiddleLine"></td></tr>`;
         }
-        htmlString += '<tr>';
-        htmlString += '<td><p>' + (k + 1) + '</td>';
-        htmlString += '<td><img src="' + data.groups[index].teams[k].flag + '" class="countryFlag"><p>' + data.groups[index].teams[k].name + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].mp + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].w + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].d + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].l + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].f + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].a + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].diff + '</p></td>';
-        htmlString += '<td align=\'center\'><p>' + data.groups[index].teams[k].p + '</p></td>';
+        htmlString += `<tr>`;
+        htmlString += `<td><p>${(k + 1)}</td>`;
+        htmlString += `<td><img src="${data.groups[index].teams[k].flag}" class="countryFlag"><p>${data.groups[index].teams[k].name}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].mp}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].w}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].d}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].l}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].f}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].a}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].diff}</p></td>`;
+        htmlString += `<td align="center"><p>${data.groups[index].teams[k].p}</p></td>`;
         htmlString += '</tr>';
     }
-    $('#groupTableBodyIndex'+index).html(htmlString);
+    $(`#groupTableBodyIndex${index}`).html(htmlString);
     let groupIsValid = true;
     for (let k = 0; k < data.groups[index].matches.length; k++) {
         if (!(matchIsSet(data.groups[index].matches[k]) && matchIsValid(data.groups[index].matches[k])))
@@ -544,9 +542,7 @@ function redrawGroup(index){
     if (index % 2 == 0){
         ro16box1Number = Number(index) + 1;
         ro16box2Number = Number(index) + 10;
-    }
-    else
-    {
+    } else {
         ro16box1Number = Number(index) + 8;
         ro16box2Number = Number(index) + 1;
     }
@@ -554,30 +550,30 @@ function redrawGroup(index){
     if (groupIsValid)
     {
         $(`.groupContainer[groupIndex="${index}"]`).addClass('validGradient');
-        $('#ro16nr'+ro16box1Number+' div span').html(data.groups[Number(index)].teams[0].name);
-        $('#ro16nr'+ro16box2Number+' div span').html(data.groups[Number(index)].teams[1].name);
-        $('#ro16nr'+ro16box1Number+' div img').attr('src', data.groups[Number(index)].teams[0].flag);
-        $('#ro16nr'+ro16box2Number+' div img').attr('src', data.groups[Number(index)].teams[1].flag);
-        $('#ro16nr'+ro16box1Number+' div img').removeClass('hidden');
-        $('#ro16nr'+ro16box2Number+' div img').removeClass('hidden')
-        $('#ro16nr'+ro16box1Number+' div span').css('color', 'black');
-        $('#ro16nr'+ro16box2Number+' div span').css('color', 'black');
-        $('#ro16nr'+ro16box1Number+' div input[type="text"]').removeAttr('disabled');
-        $('#ro16nr'+ro16box2Number+' div input[type="text"]').removeAttr('disabled');
+        $(`#ro16nr${ro16box1Number} div span`).html(data.groups[Number(index)].teams[0].name);
+        $(`#ro16nr${ro16box2Number} div span`).html(data.groups[Number(index)].teams[1].name);
+        $(`#ro16nr${ro16box1Number} div img`).attr('src', data.groups[Number(index)].teams[0].flag);
+        $(`#ro16nr${ro16box2Number} div img`).attr('src', data.groups[Number(index)].teams[1].flag);
+        $(`#ro16nr${ro16box1Number} div img`).removeClass('hidden');
+        $(`#ro16nr${ro16box2Number} div img`).removeClass('hidden')
+        $(`#ro16nr${ro16box1Number} div span`).css('color', 'black');
+        $(`#ro16nr${ro16box2Number} div span`).css('color', 'black');
+        $(`#ro16nr${ro16box1Number} div input[type="text"]`).removeAttr('disabled');
+        $(`#ro16nr${ro16box2Number} div input[type="text"]`).removeAttr('disabled');
     }
     else
     {
         $(`.groupContainer[groupIndex="${index}"]`).removeClass('validGradient');
-        $('#ro16nr'+ro16box1Number+' div span').html('TBD');
-        $('#ro16nr'+ro16box2Number+' div span').html('TBD');
-        $('#ro16nr'+ro16box1Number+' div span').css('color', 'gainsboro');
-        $('#ro16nr'+ro16box2Number+' div span').css('color', 'gainsboro');
-        $('#ro16nr'+ro16box1Number+' div img').addClass('hidden');
-        $('#ro16nr'+ro16box2Number+' div img').addClass('hidden')
-        $('#ro16nr'+ro16box1Number+' div input[type="text"]').attr('disabled', '');
-        $('#ro16nr'+ro16box2Number+' div input[type="text"]').attr('disabled', '');
-        $('#ro16nr'+ro16box1Number+' div input[type="text"]').val('');
-        $('#ro16nr'+ro16box2Number+' div input[type="text"]').val('');
+        $(`#ro16nr${ro16box1Number} div span`).html('TBD');
+        $(`#ro16nr${ro16box2Number} div span`).html('TBD');
+        $(`#ro16nr${ro16box1Number} div span`).css('color', 'gainsboro');
+        $(`#ro16nr${ro16box2Number} div span`).css('color', 'gainsboro');
+        $(`#ro16nr${ro16box1Number} div img`).addClass('hidden');
+        $(`#ro16nr${ro16box2Number} div img`).addClass('hidden')
+        $(`#ro16nr${ro16box1Number} div input[type="text"]`).attr('disabled', '');
+        $(`#ro16nr${ro16box2Number} div input[type="text"]`).attr('disabled', '');
+        $(`#ro16nr${ro16box1Number} div input[type="text"]`).val('');
+        $(`#ro16nr${ro16box2Number} div input[type="text"]`).val('');
     }
 }
 
@@ -590,7 +586,7 @@ function matchIsSet(match){
 }
 
 function sortGroup(group){
-    group.teams.sort(function(a, b){
+    group.teams.sort((a, b) => {
         if (b.p != a.p)
         {
             return (b.p - a.p);
