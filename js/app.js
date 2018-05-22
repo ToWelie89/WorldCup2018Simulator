@@ -438,8 +438,8 @@ function checkIfTournamentIsDone(){
         const shareableLink = window.location.href.split('?')[0] + '?id=' + resultat;
 
         $('#codeTextArea').val(shareableLink);
-        $('.fb-share-button').attr('data-href', shareableLink);
-        $('[property="og:url"]').attr('content', shareableLink);
+
+        $('#facebookShareLink').attr('href', `https://www.facebook.com/sharer/sharer.php?u=${shareableLink}`)
     }
 }
 

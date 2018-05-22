@@ -8,7 +8,7 @@
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://martinsonesson.se/wc2018" />
         <meta property="og:image" content="http://martinsonesson.se/wc2018/assets/fb.jpeg" />
-        <meta property="og:description" content="Check out my predictions for the 2018 World cup!" />
+        <meta property="og:description" content="A web application used for simulating the upcoming World Cup of 2018" />
 
         <link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
         <script src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -44,7 +44,7 @@
                         Share your prediction with your friends via Facebook!
                     </p>
                     <p>
-                        <div style="margin-top: 10px;" class="fb-share-button" data-href="http://martinsonesson.se/wc2018/" data-layout="button" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fmartinsonesson.se%2Fwc2018%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share on Facebook!</a></div>
+                        <a href="" id="facebookShareLink" target="_blank">Share results on Facebook</a>
                     </p>
                     <div style="margin-top: 15px;">
                         <p style="font-size: 18px;">Shareable link:</p>
@@ -64,6 +64,7 @@
 
         <div id="main">
             <div class="topBar">
+                <div class="fb-share-button" data-href="http://martinsonesson.se/wc2018/" data-layout="button" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fmartinsonesson.se%2Fwc2018%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share on Facebook!</a></div>
                 <h1 id="title">World Cup 2018 Calculator</h1>
                 <h2 id="subtitle">A webapplication made by <a target="_blank" href="http://se.linkedin.com/pub/martin-sonesson/47/b65/200/ms">Martin Sonesson</a> @ <a target="_blank" href="http://www.martinsonesson.se">martinsonesson.se</a></h2>
                 <button id="randomizeGroupsButton" class="green">
