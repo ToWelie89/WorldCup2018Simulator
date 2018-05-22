@@ -56,6 +56,8 @@ $(document).ready(() => {
 
     if (idVariable && idVariable.length > 0){
         loadDataFromId(idVariable);
+    } else {
+        document.querySelector('.matchScoreBox').focus();
     }
 });
 
@@ -173,6 +175,7 @@ const initializeMatches = () => {
     });
 
     let htmlString = `<table width="100%">`;
+    let totalIndex = 1;
     for (let i = 0; i < data.groups.length; i++)
     {
         if (i == 0 || i == (NUMBER_OF_GROUPS / 2)) {
@@ -185,11 +188,13 @@ const initializeMatches = () => {
         for (let k = 0; k < data.groups[i].matches.length; k++) {
             htmlString += `<tr>`;
             htmlString += `<td align="right" width="150"><p>${data.groups[i].matches[k].team1.name}</p><img src="${data.groups[i].matches[k].team1.flag}" class="countryFlag"></td>`;
-            htmlString += `<td><input maxlength="1"  type="text" class="matchScoreBox match1" groupIndex="${i}" matchIndex="${k}" /></td>`;
+            htmlString += `<td><input maxlength="1"  type="text" class="matchScoreBox match1" groupIndex="${i}" matchIndex="${k}" tabindex="${totalIndex}" /></td>`;
             htmlString += `<td><span class="matchLine"><p>-</p></span></td>`;
-            htmlString += `<td><input maxlength="1" type="text" class="matchScoreBox match2" groupIndex="${i}" matchIndex="${k}" /></td>`;
+            totalIndex++;
+            htmlString += `<td><input maxlength="1" type="text" class="matchScoreBox match2" groupIndex="${i}" matchIndex="${k}" tabindex="${totalIndex}" /></td>`;
             htmlString += `<td align="left" width="150"><img src="${data.groups[i].matches[k].team2.flag}" class="countryFlag"><p>${data.groups[i].matches[k].team2.name}</p></td>`;
             htmlString += `</tr>`;
+            totalIndex++;
         }
         htmlString += `</table>`;
         htmlString += `</div>`;
@@ -275,6 +280,7 @@ function clearGroups(){
 function setMatchScore(){
     const groupIndex = $(this).attr('groupIndex');
     const matchIndex = $(this).attr('matchIndex');
+    const tabindex = Number($(this).attr('tabindex'));
 
     const team1box = $(`.match1[groupIndex="${groupIndex}"][matchIndex=${matchIndex}]`);
     const team2box = $(`.match2[groupIndex="${groupIndex}"][matchIndex=${matchIndex}]`);
@@ -310,6 +316,11 @@ function setMatchScore(){
         team2box.removeClass('validGradient invalidGradient');
     }
 
+    // select next one
+    if ($(this).val() !== '') {
+        $(`.matchScoreBox[tabindex="${tabindex + 1}"]`).focus();
+    }
+
     calculateGroup(groupIndex);
 
     for (let i = 0; i < knockOutPhases.length; i++) {
@@ -322,6 +333,10 @@ function setMatchScore(){
 function knockoutPhaseKeyUp(){
     const thisRound = Number($(this).parent().parent().attr('round'));
     const thisRoundIndex = Number($(this).parent().parent().attr('id').replace(`ro${thisRound}nr`, ''));
+
+    if ($(this).val() !== '') {
+        $(`.knockoutMatchScoreBox[tabindex="${Number($(this).attr('tabindex')) + 1}"]`).focus();
+    }
 
     calculateAndRedrawKnockoutMatch(thisRound, thisRoundIndex); // E.g 16, 2 for the second Ro16 match
 }
@@ -439,6 +454,8 @@ function checkIfTournamentIsDone(){
         const shareableLink = window.location.href.split('?')[0] + '?id=' + resultat;
 
         $('#codeTextArea').val(shareableLink);
+
+        $('html,body').animate({ scrollTop: 0 }, 'slow');
 
         $('#facebookShareLink').unbind();
         $('#facebookShareLink').click(function() {
